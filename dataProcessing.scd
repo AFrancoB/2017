@@ -152,7 +152,7 @@ dataToSonify.collect({|stat, iter|
 		var ranges = findMax.(data); var out = 200 + (iter*3);
 		// ~continuum.(d, 200 + (iter*3), ~findMax.(d), b, stat)
 
-		SynthDef((station++band).asSymbol, { |vol=1|
+		SynthDef((station++band).asSymbol, { |vol=0.5|
 			var vMax = ranges.vMax;
 			var nsMax = ranges.nsMax;
 			var eoMax = ranges.eoMax;
@@ -163,12 +163,15 @@ dataToSonify.collect({|stat, iter|
 				"mhvm", 600, "mpvm", 700, "thvm", 800, "tlvm", 900, "vrvm", 1000);
 
 			var ns = data.collect({|item| item.ns.fold(0,nsMax).linexp(0,nsMax, 30/res, 800/res)});
-			var v = data.collect({|item| item.v.fold(0,vMax).linlin(0,vMax, (-36).dbamp, 1)});
+			var v = data.collect({|item| item.v.fold(0,vMax).linlin(0,vMax, (-40).dbamp, (-12).dbamp)});
 			var eo = data.collect({|item| item.eo.linlin((eoMax*(-1)),eoMax, 0, 100)   });
 
 			var p = data.collect({|item| item.eo.linlin((eoMax*(-1)),eoMax, 0,1)  });
 			var c = data.collect({|item| item.ns.fold(0,nsMax).linexp(0,nsMax, 3000*res, 6000*res)});
 			var r = data.collect({|item| item.v.fold(0,vMax).linlin(0,vMax, 0.01, 0.001)});
+
+			var d = data.collect({|item| item.eo.linlin((eoMax*(-1)),eoMax, 0.1,0.5)});
+
 
 			var freq = EnvGen.kr(Env(ns,[res]),doneAction:2);
 			var amp = EnvGen.kr(Env(v,[res]));
@@ -176,19 +179,20 @@ dataToSonify.collect({|stat, iter|
 			var pos = EnvGen.kr(Env(p, [res]));
 			var cut = EnvGen.kr(Env(c, [res]));
 			var rin = EnvGen.kr(Env(r, [res]));
+			var dec = EnvGen.kr(Env(d, [res]));
 
 			Out.ar(out,
 				PanX.ar(3,
-					CombC.ar(RLPF.ar(VOsc.ar((timbre+2017) + w, freq, mul: amp),cut,1),0.2, rin, 0.2),
-					pos
-				)*vol;
+					CombC.ar(
+						RLPF.ar(
+							VOsc.ar((timbre+2031) + w, freq, mul: amp) ///// first buffer hardcoded, WARNING!!!!!!!
+							,cut,1)
+						,0.2, rin, dec),
+					pos, vol
+				)
 			)
-
-
-
 		}).add
 	})
-
 });
 
 ("sonified data" + dataToSonify).postln;

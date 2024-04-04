@@ -7,6 +7,8 @@
 //load wavetable catalogue;
 var path = thisProcess.nowExecutingPath.dirname;
 var waveShapeCatalogue = path++"/wavetable";
+var noiseGen = FloatArray.fill(44100 * 5.0, {1.0.rand2}); // 5 seconds of noise
+
 //catalogue taken from here: https://www.adventurekid.se/akrt/waveforms/
 // open source and free for distribution
 // adapted to SC in the sc mailing list (search for thread)
@@ -58,7 +60,6 @@ var val= ~range.(100,200);
 //////////
 // Synthdefs
 
-"synths loaded!".postln;
 (
 ~waveShapeList.collect({|item|
 	var name = item.asString[1..].toLower;
@@ -66,20 +67,26 @@ var val= ~range.(100,200);
 	var min = ~osciladores.at(item.asSymbol).min;
 
 	SynthDef(name, {
-		| out, sustain=1, freq=220, speed=1, begin=0, end=1, pan=0.5, accelerate=0, offset, volume=0.1, bufInter= 100, phase=1, wmin=0.1, wmax=0.15, att=0.01, rel=0.99|
+		| out, sustain=1, freq=220, speed=1, begin=0, end=1, pan=0.5, accelerate=0, offset, volume=0.9, inter= 100, phase=1, minw=0.1, maxw=0.15, att=0.01, rel=0.99|
 
-		var minS = wmin.linlin(0,1,min,max);
-		var maxS = wmax.linlin(0,1,min,max);
+		// var minS = gain.linlin(0,1,min,max);
+		// var maxS = pan.linlin(0,1,min,max);
+
+		var minS = minw.linlin(0,1,min,max);
+		var maxS = maxw.linlin(0,1,min,max);
+
 		var pitch = freq*speed;
 
-		var env = EnvGen.ar(Env.pairs([[begin,0],[begin+0.0001,1],[end-0.0001,1],[end,0]]), timeScale: sustain, doneAction: Done.freeSelf);
+		var env = EnvGen.ar(Env.pairs([[begin,1],[end,1],[end,0]]), timeScale: sustain, doneAction: Done.freeSelf);
 		var env2 = EnvGen.ar(Env.perc(att,rel),timeScale:sustain);
-		var sig= VOsc.ar(Line.kr(minS,maxS,sustain*bufInter), pitch,mul: volume);
+		var sig= VOsc.ar(Line.kr(minS,maxS,sustain*inter), pitch,mul: volume);
 		OffsetOut.ar(out,DirtPan.ar(sig*env2, ~dirt.numChannels, pan, env));
 	}).add;
 })
 );
 
+/*Synth(\akwf, [\out, 200, \wmin, 0.55, \wmax, 0.6, \bufInter, 100])
+s.meter*/
 /*Synth(\AKWF, [\wmin, 0.55, \wmax, 0.6, \bufInter, 100])
 
 
@@ -94,3 +101,54 @@ SynthDef(\wave, {
     OffsetOut.ar(out,DirtPan.ar(sig*env2, ~dirt.numChannels, pan, env));
 }).add;
 );*/
+
+
+(
+SynthDef(\1985, { |dur=3, fund=35, gain=1.8, out=0|
+	var earthquakePseudoData = [0.1,0.2,0.1,0.3,0.2,0.5,0.4,0.7,0.5,0.6,0.8,0.7,0.9,0.8,1,0.9,0.6,0.7,0.3,0.4,0.1,0.2,0];
+	var data= earthquakePseudoData.stutter;
+	var dataBeats= data.linlin(0,1,20,2);
+	var dataVol= data.linlin(0,1,0.05,0.125);
+	var beats= EnvGen.kr(Env(dataBeats,dur!(data.size-1)));
+	var vol= EnvGen.kr(Env(dataVol++[0],dur!(data.size-1) ++ [10]));
+
+
+	Out.ar(out, SinOsc.ar(
+		freq: (fund+[0,beats]),
+		phase: 0,
+		mul: vol*gain));
+
+
+}).add;
+
+//// the duration of this is 46 *2 seconds plus fadeOut: 1:40"
+
+SynthDef(\1985 ++ ("Headphones"), { |dur=2, fund=35, gain=1, out=0|
+	var earthquakePseudoData = [0.1,0.2,0.1,0.3,0.2,0.5,0.4,0.7,0.5,0.6,0.8,0.7,0.9,0.8,1,0.9,0.6,0.7,0.3,0.4,0.1,0.2,0];
+	var data= earthquakePseudoData.stutter;
+	var dataBeats= data.linlin(0,1,20,2);
+	var dataVol= data.linlin(0,1,0.05,0.125);
+	var beats= EnvGen.kr(Env(dataBeats,dur!(data.size-1)));
+	var vol= EnvGen.kr(Env(dataVol++[0],dur!(data.size-1) ++ [10]));
+
+
+	Out.ar(out, Mix(SinOsc.ar(
+		freq: (fund+[0,beats]),
+		phase: 0,
+		mul: vol*gain))!2);
+
+
+}).add;
+);
+
+~noiseGenBuffer = Buffer.loadCollection(s, noiseGen);
+
+"synths loaded!".postln;
+"wait 50 secs for data to load...".postln;
+
+
+
+
+
+
+
