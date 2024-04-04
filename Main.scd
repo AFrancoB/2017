@@ -38,7 +38,7 @@ s.waitForBoot {
 	ensemble.load;
 	synths.load;
 	earthquakeEvent.load;
-	// data.load;
+	data.load;
 };
 s.latency = 0.3;
 );
