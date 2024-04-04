@@ -148,7 +148,7 @@ SynthDef(\stationPositionToQuad, {
 
 	[name,
 	 Synth(\stationPositionToStereo,
-			[\out,0, \amp,(-18).dbamp, \angle, ang, \dist, dist, \maxd,maxDist, \mind,minDist, \in,in]
+			[\out,0, \amp,(-3).dbamp, \angle, ang, \dist, dist, \maxd,maxDist, \mind,minDist, \in,in]
 			,addAction: \addToTail)]
 };
 

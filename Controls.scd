@@ -17,6 +17,7 @@
 )
 
 
+
 ////////////////// sugerido para cuadra
 (
 /////////////////// *********** ensamble ********* ////////////
@@ -92,7 +93,7 @@ var vol = -3; // vol in dBs
 Tdef(\earthquakeEvent).play // locally test earthquake event
 
 
-
+s.meter
 
 
 
