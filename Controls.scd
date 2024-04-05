@@ -5,7 +5,7 @@
 ////////////////// sugerido para estereo:
 (
 /////////////////// *********** ensamble ********* ////////////
-~outputPiraran = Synth(\stereoPiraran);
+~outputPiraran = Synth(\stereoPiraran, addAction: 'addToTail'); /////***** Esto en todos los de SuperDirt
 
 /////////////////// *********** evento sismico ********* ////////////
 ~outputFallAndDebris = Synth(\fallAndDebrisStereo);
