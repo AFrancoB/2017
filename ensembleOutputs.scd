@@ -26,20 +26,39 @@ SynthDef(\ceilingNILPiraran, { |vol=1, out=0, in=116|
 // the speaker output should be 1 (front left), 2 (front right), 3 (back left), 4 (back right)
 SynthDef(\quadraPiraran, { |vol=1, out=0, in=100|
 	var in1, in2, in3, in4;
-	# in1, in2, in3, in4 = In.ar(in,4);
+	# in1, in2, in3, in4 = FreeVerb.ar(In.ar(in,4));
 
-	Out.ar(out, [in1, in2, in4, in3] )
+	// Out.ar(out, [in1, in2, in4, in3] )
+	Out.ar(out, [in1, in2, in3, in4] )
+
+}).add;
+
+SynthDef(\hexaPiraran, { |vol=1, out=0, in=100|
+	var in1, in2, in3, in4, in5, in6;
+	# in1, in2, in3, in4 = In.ar(in,6);
+
+	Out.ar(out, [in1, in2, in4, in3] ) //// modify here
 
 }).add;
 
 // the speaker output should be 1 (front left), 2 (front right), 3 (back left), 4 (back right)
-SynthDef(\stereoPiraran, { |vol=1, out=0, in=100|
-	var w, x, y, z, decoded;
-	# w,x,y,z = BFEncode1.ar(In.ar(in,4),[-0.25pi,0.25pi, 0.75pi, -0.75pi],0,2,1);
-	decoded = BFDecode1.ar(w,x,y,z, [-0.25pi,0.25pi]);
+SynthDef(\quadToStereoPiraran, { |vol=1, out=0, in=100|
+	var in1, in2, in3, in4;
+	# in1,in2,in3,in4 = FreeVerb.ar(In.ar(in,4));
 
-	Out.ar(out, decoded*vol )
+	Out.ar(0, [in1,in2]*(-6).dbamp);
+	Out.ar(0, [in3,in4]*(-12).dbamp);
+
 }).add;
+
+// SynthDef(\hexaToStereoPiraran, { |vol=1, out=0, in=100|
+// 	var in1, in2, in3, in4, in5, in6;
+// 	# in1,in2,in3,in4,in5,in6 = In.ar(in,6);
+//
+// 	Out.ar(0, [in1,in2]*(-6).dbamp);
+// 	Out.ar(0, [in3,in4]*(-12).dbamp);
+//
+// }).add;
 );
 
 

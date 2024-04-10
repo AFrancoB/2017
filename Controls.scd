@@ -1,11 +1,10 @@
 ///////******* THIS NEEDS TO BE ACTIVATED FOR PERFORMANCE    ********//////////
 // CHOOSE BETWEEN STEREO, QUAD OR NIL CONFIGURATIONS OUTPUTS
 
-
 ////////////////// sugerido para estereo:
 (
 /////////////////// *********** ensamble ********* ////////////
-~outputPiraran = Synth(\stereoPiraran, addAction: 'addToTail'); /////***** Esto en todos los de SuperDirt
+~outputPiraran = Synth(\hexaToStereoPiraran, addAction: 'addToTail'); /////***** Esto en todos los de SuperDirt
 
 /////////////////// *********** evento sismico ********* ////////////
 ~outputFallAndDebris = Synth(\fallAndDebrisStereo);
@@ -13,7 +12,18 @@
 /////////////////// *********** sonificacion ********* ////////////
 ~outputStations = ~initStationsStereo.(~coordinates);
 
-~headphones = False; // si vas a tocar con audifonos (no se recomienda) cambia esto a True
+)
+
+(
+/////////////////// *********** ensamble ********* ////////////
+~outputPiraran = Synth(\quadToStereoPiraran, addAction: 'addToTail'); /////***** Esto en todos los de SuperDirt
+
+/////////////////// *********** evento sismico ********* ////////////
+~outputFallAndDebris = Synth(\fallAndDebrisStereo);
+
+/////////////////// *********** sonificacion ********* ////////////
+~outputStations = ~initStationsStereo.(~coordinates);
+
 )
 
 
@@ -21,15 +31,15 @@
 ////////////////// sugerido para cuadra
 (
 /////////////////// *********** ensamble ********* ////////////
-~outputPiraran = Synth(\quadraPiraran);
+~outputPiraran = Synth(\quadraPiraran, addAction: 'addToTail');
 
-/////////////////// *********** eveneto sismico ********* ////////////
+/////////////////// *********** evento sismico ********* ////////////
 ~outputFallAndDebris = Synth(\fallAndDebrisQuad);
 
 /////////////////// *********** sonificacion ********* ////////////
 ~outputStations = ~initStationsQuad.(~coordinates);
 
-~headphones = False; // esto debe estar en falso
+~headphones = true; // esto debe estar en falso
 )
 
 (
@@ -37,7 +47,6 @@
 var vol = -3; // vol in dBs
 ~outputStations.collect({|item| item[1].set(\amp, vol.dbamp )})
 )
-
 
 
 
@@ -64,7 +73,7 @@ var vol = -3; // vol in dBs
 // ~output = ~initStationsNIL.(~coordinates); // if you are at the NIL
 
 
-~headphones = False; // if playing with headphones (not recommended, change this to True
+~headphones = false; // if playing with headphones (not recommended, change this to True
 
 )
 
@@ -73,7 +82,7 @@ var vol = -3; // vol in dBs
 
 (
 // volume down in all output synths of sonification
-var vol = -3; // vol in dBs
+var vol = 3; // vol in dBs
 ~outputStations.collect({|item| item[1].set(\amp, vol.dbamp )})
 )
 
@@ -81,6 +90,8 @@ var vol = -3; // vol in dBs
 
 
 //////// testing:
+// test batimentos
+
 ( // play sonification locally (use estuary, superdirtsocket, superdirtlistener to network the event)
 ~dataToSonify.collect({|station|
 	station.collect({|b|
@@ -92,6 +103,11 @@ var vol = -3; // vol in dBs
 
 Tdef(\earthquakeEvent).play // locally test earthquake event
 
+~eightyFive = Synth(\1985 ++ ("Headphones"))
+
+~eightyFive = Synth(\1985)
+
+~eightyFive.set(\gain, 2.2)
 
 s.meter
 
@@ -100,6 +116,8 @@ s.meter
 /// check buffers of wavetable:
 ~waveArray[0][0].bufnum
 
+
+///// esto es para la sonificacion
 
 ~output[0] // an array with a 'tuplet' (two slot array): a spatial relationship between a seismic station and one of the three representative places of the earthquake, in the second index: the synth that controls its emitting position.
 

@@ -14,7 +14,7 @@ Server.default.options.memSize= 512000*20;
 Server.default.options.maxNodes=128*1024;
 Server.default.options.numWireBufs= 512;
 
-// Server.default.options.device = "ASIO : MOTU Pro Audio";
+Server.default.options.device = "ASIO : MOTU Pro Audio";
 
 // add here your interface
 
@@ -27,11 +27,12 @@ s.waitForBoot {
 	~dirt.loadSoundFiles;
 	~dirt.loadSoundFiles(path ++ "/agua/primeradeclaracionEZLN/");
 	~dirt.loadSoundFiles(path ++ "/agua/ayotzinapa2015/");
-	~dirt.loadSoundFiles(path ++ "/agua/madrid2016/");
+	~dirt.loadSoundFiles(path ++ "/agua/madridmorelia2020/");
 	~dirt.loadSoundFiles(path ++ "/agua/chile2019/");
 	~dirt.loadSoundFiles(path ++ "/agua/berlinmayday2023/");
 	~dirt.loadSoundFiles(path ++ "/agua/hamilton2024/");
 	~dirt.start(57120, [100,108,116]); ////// 100 = floor, 108 = middle and 116 = ceiling
+	// ~dirt.start(57120, [0]);
 	coords.load;
 	spatialisation.load;
 	oscDefs.load;
@@ -39,6 +40,8 @@ s.waitForBoot {
 	synths.load;
 	earthquakeEvent.load;
 	data.load;
+	~headphones = true;
+	s.meter;
 };
 s.latency = 0.3;
 );

@@ -163,7 +163,7 @@ dataToSonify.collect({|stat, iter|
 				"mhvm", 600, "mpvm", 700, "thvm", 800, "tlvm", 900, "vrvm", 1000);
 
 			var ns = data.collect({|item| item.ns.fold(0,nsMax).linexp(0,nsMax, 30/res, 800/res)});
-			var v = data.collect({|item| item.v.fold(0,vMax).linlin(0,vMax, (-40).dbamp, (-12).dbamp)});
+			var v = data.collect({|item| item.v.fold(0,vMax).linlin(0,vMax, (-35).dbamp, (-12).dbamp)});
 			var eo = data.collect({|item| item.eo.linlin((eoMax*(-1)),eoMax, 0, 100)   });
 
 			var p = data.collect({|item| item.eo.linlin((eoMax*(-1)),eoMax, 0,1)  });
@@ -182,14 +182,15 @@ dataToSonify.collect({|stat, iter|
 			var dec = EnvGen.kr(Env(d, [res]));
 
 			Out.ar(out,
-				PanX.ar(3,
+				Compander.ar(PanX.ar(3,
 					CombC.ar(
 						RLPF.ar(
 							VOsc.ar((timbre+2031) + w, freq, mul: amp) ///// first buffer hardcoded, WARNING!!!!!!!
 							,cut,1)
 						,0.2, rin, dec),
 					pos, vol
-				)
+				),
+				WhiteNoise.ar(0.5),0.5)
 			)
 		}).add
 	})

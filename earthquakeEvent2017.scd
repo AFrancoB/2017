@@ -15,9 +15,9 @@ SynthDef(\fallAndDebrisQuad, { | vol=1|
 	var w,x,y,z, decoded;
 
 	// #w,x,y,z = BFEncode2.ar(WhiteNoise.ar(0.5),0.2,1,0,1,0);
-	#w,x,y,z = In.ar(300,4);
+	#w,x,y,z = Compander.ar(In.ar(300,4),WhiteNoise.ar(0.5),0.5);
 
-	decoded = BFDecode1.ar(w,x,y,z,[1.75pi,0.25pi, 1.25pi, 0.5pi],0,0,(-6).dbamp);
+	decoded = BFDecode1.ar(w,x,y,z,[1.75pi,0.25pi, 1.25pi, 0.5pi],0,0,(-3).dbamp);
 
 	Out.ar(0, decoded*vol)
 }).add;
@@ -103,7 +103,7 @@ SynthDef(\debris, { | vol=1, out=300, xp=0, yp=0 |
 	var env = EnvGen.kr(Env([0,1,1,0],[20,90,40]),doneAction:2);
 	var sigOut = BFEncode2.ar(sig*env, xp + SinOsc.kr(0.1,0,0.1pi), yp + SinOsc.kr(0.15,0,0.1pi),-0.3,1);
 
-	Out.ar(out, GVerb.ar(Compander.ar(sigOut, WhiteNoise.ar(0.5),0.25,mul:0.5))*vol)
+	Out.ar(out, GVerb.ar(Compander.ar(sigOut, WhiteNoise.ar(0.5), 0.25, mul:0.4))*vol)
 }).add;
 
 Tdef(\glass1, {

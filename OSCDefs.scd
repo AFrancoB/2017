@@ -34,8 +34,7 @@ OSCdef(\2017,{
 },"/play2");
 
 
-/*OSCdef(\testy,{
+OSCdef(\testy,{
 	|msg,time,addr,recvPort|
 	msg.postln;
-},"/play2");*/
-
+},"/play2");

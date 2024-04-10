@@ -85,7 +85,7 @@ var val= ~range.(100,200);
 })
 );
 
-/*Synth(\akwf, [\out, 200, \wmin, 0.55, \wmax, 0.6, \bufInter, 100])
+/*Synth(\akwf, [\out, 0, \pan, 1, \wmin, 0.55, \wmax, 0.6, \inter, 100])
 s.meter*/
 /*Synth(\AKWF, [\wmin, 0.55, \wmax, 0.6, \bufInter, 100])
 
@@ -104,7 +104,7 @@ SynthDef(\wave, {
 
 
 (
-SynthDef(\1985, { |dur=3, fund=35, gain=1.8, out=0|
+SynthDef(\1985, { |dur=3, fund=35, gain=2.2, out=0|
 	var earthquakePseudoData = [0.1,0.2,0.1,0.3,0.2,0.5,0.4,0.7,0.5,0.6,0.8,0.7,0.9,0.8,1,0.9,0.6,0.7,0.3,0.4,0.1,0.2,0];
 	var data= earthquakePseudoData.stutter;
 	var dataBeats= data.linlin(0,1,20,2);
@@ -113,7 +113,7 @@ SynthDef(\1985, { |dur=3, fund=35, gain=1.8, out=0|
 	var vol= EnvGen.kr(Env(dataVol++[0],dur!(data.size-1) ++ [10]));
 
 
-	Out.ar(out, SinOsc.ar(
+	Out.ar([out, 4], SinOsc.ar(
 		freq: (fund+[0,beats]),
 		phase: 0,
 		mul: vol*gain));
@@ -123,7 +123,7 @@ SynthDef(\1985, { |dur=3, fund=35, gain=1.8, out=0|
 
 //// the duration of this is 46 *2 seconds plus fadeOut: 1:40"
 
-SynthDef(\1985 ++ ("Headphones"), { |dur=2, fund=35, gain=1, out=0|
+SynthDef(\1985 ++ ("Headphones"), { |dur=2, fund=35, gain=2.4, out=0|
 	var earthquakePseudoData = [0.1,0.2,0.1,0.3,0.2,0.5,0.4,0.7,0.5,0.6,0.8,0.7,0.9,0.8,1,0.9,0.6,0.7,0.3,0.4,0.1,0.2,0];
 	var data= earthquakePseudoData.stutter;
 	var dataBeats= data.linlin(0,1,20,2);
@@ -132,7 +132,7 @@ SynthDef(\1985 ++ ("Headphones"), { |dur=2, fund=35, gain=1, out=0|
 	var vol= EnvGen.kr(Env(dataVol++[0],dur!(data.size-1) ++ [10]));
 
 
-	Out.ar(out, Mix(SinOsc.ar(
+	Out.ar([out, 4], Mix(SinOsc.ar(
 		freq: (fund+[0,beats]),
 		phase: 0,
 		mul: vol*gain))!2);

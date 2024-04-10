@@ -167,7 +167,7 @@ SynthDef(\stationPositionToQuad, {
 
 	[name,
 	 Synth(\stationPositionToQuad,
-			[\out,0, \amp,(-3).dbamp, \angle, ang, \dist, dist, \maxd,maxDist, \mind,minDist, \in,in]
+			[\out,0, \amp,(-4.5).dbamp, \angle, ang, \dist, dist, \maxd,maxDist, \mind,minDist, \in,in]
 			,addAction: \addToTail)]
 };
 
