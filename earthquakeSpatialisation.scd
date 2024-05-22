@@ -120,6 +120,31 @@ SynthDef(\stationPositionToQuad, {
 	Out.ar(out, sig)
 }).add;
 
+
+SynthDef(\stationPositionToSurround, {
+	|out=0, amp=0.1, angle=0, dist=0, maxd=100, mind=1, in=200|
+	// var angleIn = 271; // testing
+	// var inTest = WhiteNoise.ar(0.1);
+	var di = dist.linlin(mind,maxd,0,4);
+	var lev = amp;
+	var radians = angle * (pi / 180);
+	var yP = di * radians.cos;
+	var xP = di * radians.sin;
+	var w, x, y, z;
+	var inSig = In.ar(in);
+	var sig1, sig2, sig3, sig4, sig5;
+
+	#w, x, y, z = BFEncode2.ar(inSig, xP, yP, 0, lev, 0);
+    //decode for 4 channels
+	#sig1,sig2,sig3,sig4,sig5 = BFDecode1.ar(w, x, y, z, [1.75pi, 0.25pi, 1pi, 1.25pi, 0.75pi], 0);
+
+	Out.ar(out  , sig1);
+	Out.ar(out+1, sig2);
+	Out.ar(out+2, sig3);
+	Out.ar(out+4, sig4);
+	Out.ar(out+5, sig5);
+}).add;
+
 (
 /*~initStationNIL = {
 	| space, minDist, maxDist, in |
@@ -176,6 +201,25 @@ SynthDef(\stationPositionToQuad, {
 	var max = minMaxDist.( spaces).max;
 
 	spaces.collect({|item,iter| ~initStationQuad.(item, min, max, (200+(iter)) )})
+};
+
+~initStationSurround = {
+	| space, minDist, maxDist, in |
+	var name = space.name;
+	var ang = angle.(space);
+	var dist = space.distance;
+
+	[name,
+	 Synth(\stationPositionToSurround,
+			[\out,0, \amp,(-4.5).dbamp, \angle, ang, \dist, dist, \maxd,maxDist, \mind,minDist, \in,in]
+			,addAction: \addToTail)]
+};
+
+~initStationsSurround = { | spaces |
+	var min = minMaxDist.( spaces).min;
+	var max = minMaxDist.( spaces).max;
+
+	spaces.collect({|item,iter| ~initStationSurround.(item, min, max, (200+(iter)) )})
 };
 );
 

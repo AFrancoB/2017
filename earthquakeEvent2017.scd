@@ -1,6 +1,31 @@
 // earthquake event
+~nel = [
+	// floor speakers (0 to 7)
+	[-0.25pi,-0.5pi], [0.25pi,-0.5pi], [-0.375pi,-0.5pi], [0.375pi,-0.5pi],
+	[-0.625pi,-0.5pi], [0.625pi,-0.5pi], [-0.75pi,-0.5pi], [0.75pi,-0.5pi],
+	// middle row speakers (8 to )
+	[0pi,0pi], [0pi,-0.05pi],
+	[-0.3pi,0pi], [0.3pi, 0pi], [-0.34pi, 0pi], [0.34pi, 0pi],
+	[-0.6pi, 0pi], [0.6pi, 0pi],
+	// ceiling speakers
+	[-0.25pi,0.5pi], [0.25pi,0.5pi], [-0.375pi,0.5pi], [0.375pi,0.5pi],
+	[-0.625pi,0.5pi], [0.625pi,0.5pi], [-0.75pi,0.5pi], [0.75pi,0.5pi]
+].flop;
 
-SynthDef(\fallAndDebrisStereo, { | vol=1|
+SynthDef(\fallAndDebrisNIL, { | vol=1, out=0|
+	var w,x,y,z, decoded;
+
+	// #w,x,y,z = BFEncode2.ar(WhiteNoise.ar(0.5),0.2,1,0,1,0);
+	#w,x,y,z = In.ar(300,4);
+
+	decoded = BFDecode1.ar(w,x,y,z, ~nel[0], ~nel[1],0, (-6).dbamp);
+
+	Out.ar(out, decoded*vol)
+}).add;
+
+
+
+SynthDef(\fallAndDebrisStereo, { | vol=1, out=0|
 	var w,x,y,z, decoded;
 
 	// #w,x,y,z = BFEncode2.ar(WhiteNoise.ar(0.5),0.2,1,0,1,0);
@@ -8,7 +33,22 @@ SynthDef(\fallAndDebrisStereo, { | vol=1|
 
 	decoded = BFDecode1.ar(w,x,y,z,[1.75pi,0.25pi]);
 
-	Out.ar(0, decoded*vol)
+	Out.ar(out, decoded*vol)
+}).add;
+
+SynthDef(\fallAndDebrisSurround, { | vol=1, out=0|
+	var w,x,y,z, out1, out2, out3, out4, out5;
+
+	// #w,x,y,z = BFEncode2.ar(WhiteNoise.ar(0.5),0.2,1,0,1,0);
+	#w,x,y,z = Compander.ar(In.ar(300,4),WhiteNoise.ar(0.5),0.5);
+
+	#out1,out2,out3,out4,out5 = BFDecode1.ar(w,x,y,z,[1.75pi,0.25pi,1pi, 1.25pi, 0.75pi],0,0,(-3).dbamp);
+
+	Out.ar(out  , out1*vol);
+	Out.ar(out+1, out2*vol);
+	Out.ar(out+2, out3*vol);
+	Out.ar(out+4, out4*vol);
+	Out.ar(out+5, out5*vol);
 }).add;
 
 SynthDef(\fallAndDebrisQuad, { | vol=1|
@@ -27,7 +67,7 @@ SynthDef(\impact, { | out=300, vol= 1, len=1.5|
 	var envImpact1 = EnvGen.kr(Env([0,1,0.1,0],[0.0015,len,1.8]));
 	var sigImpact1 = PinkNoise.ar(0.2)* envImpact1;
 	var env = EnvGen.kr(Env([0,1,0.1,0],[0.001, len,2.8]),doneAction:2); // main env
-	var sigImpact2 = BrownNoise.ar(0.3)* env;
+	var sigImpact2 = BrownNoise.ar(0.25)* env;
 
 	var sig1 = BFEncode1.ar(sigImpact1, LFSaw.kr(0.01),0,2,6);
 	var sig2 = BFEncode1.ar(sigImpact2, LFSaw.kr(0.015),0,2,6);
@@ -50,7 +90,7 @@ SynthDef(\glass, {
 	granulation= PitchShift.ar(sig*envSig,0.4,1.2,0.3,0.12)*10;
 	sigG= Convolution.ar(granulation, WhiteNoise.ar(0.5), 512/8, 0.1);
 
-	sigOut = BFEncode1.ar(SelectX.ar(which, [sigG*amp, sig*envSig*amp]),r + LFSaw.kr(0.01),elev,2,1);
+	sigOut = BFEncode1.ar(SelectX.ar(which, [sigG*amp*(-6).dbamp, sig*envSig*amp]),r + LFSaw.kr(0.01),elev,2,1);
 
 	Out.ar(out, sigOut )
 }).add;
@@ -103,7 +143,7 @@ SynthDef(\debris, { | vol=1, out=300, xp=0, yp=0 |
 	var env = EnvGen.kr(Env([0,1,1,0],[20,90,40]),doneAction:2);
 	var sigOut = BFEncode2.ar(sig*env, xp + SinOsc.kr(0.1,0,0.1pi), yp + SinOsc.kr(0.15,0,0.1pi),-0.3,1);
 
-	Out.ar(out, GVerb.ar(Compander.ar(sigOut, WhiteNoise.ar(0.5), 0.25, mul:0.4))*vol)
+	Out.ar(out, GVerb.ar(Compander.ar(sigOut, sigOut, 0.25, mul:0.3))*vol)
 }).add;
 
 Tdef(\glass1, {

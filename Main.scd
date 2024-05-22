@@ -22,8 +22,8 @@ Server.default.options.numOutputBusChannels = 26;
 Server.default.options.sampleRate = 48000;
 
 s.waitForBoot {
-	~dirt = SuperDirt(4, s); // quadra and stereo only floor bus works
-	// ~dirt = SuperDirt(8, s); // octa and NIL
+	// ~dirt = SuperDirt(4, s); // quadra and stereo only floor bus works
+	~dirt = SuperDirt(8, s); // octa and NIL
 	~dirt.loadSoundFiles;
 	~dirt.loadSoundFiles(path ++ "/agua/primeradeclaracionEZLN/");
 	~dirt.loadSoundFiles(path ++ "/agua/ayotzinapa2015/");
@@ -39,9 +39,10 @@ s.waitForBoot {
 	ensemble.load;
 	synths.load;
 	earthquakeEvent.load;
-	data.load;
-	~headphones = true;
+	// data.load;
+	~headphones = false;
 	s.meter;
 };
 s.latency = 0.3;
 );
+

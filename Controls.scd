@@ -1,18 +1,25 @@
 ///////******* THIS NEEDS TO BE ACTIVATED FOR PERFORMANCE    ********//////////
+
+(
+/////////////////// *********** ensamble ********* ////////////
+~stereoFromNilTimekNot = Synth(\nilTimekNotToStereo, addAction: 'addToTail');
+/////***** Esto en todos los de SuperDirt
+// Pbind(\out, 116, \pan, Pseq([0,0.25,0.5,0.75,1,1.25,1.5,1.75],inf), \dur, 0.3, \instrument, \aguitar, \volume, (-15).dbamp, \note, Pseq([0,2,3,5,7,8,5,3],inf)).play;
+/////////////////// *********** evento sismico ********* ////////////
+~outputFallAndDebris = Synth(\fallAndDebrisNIL);
+
+/////////////////// *********** sonificacion ********* ////////////
+// ~outputStations = ~initStationsStereo.(~coordinates);
+
+)
+
+//// USE THIS CODE TO FIX STEREO SIGNAL
+//~stereoFromNilTimekNot.set(\makeUp, 2.25, \lim, (-20).dbamp, \thresh, 1/8)
+
+
 // CHOOSE BETWEEN STEREO, QUAD OR NIL CONFIGURATIONS OUTPUTS
 
 ////////////////// sugerido para estereo:
-(
-/////////////////// *********** ensamble ********* ////////////
-~outputPiraran = Synth(\hexaToStereoPiraran, addAction: 'addToTail'); /////***** Esto en todos los de SuperDirt
-
-/////////////////// *********** evento sismico ********* ////////////
-~outputFallAndDebris = Synth(\fallAndDebrisStereo);
-
-/////////////////// *********** sonificacion ********* ////////////
-~outputStations = ~initStationsStereo.(~coordinates);
-
-)
 
 (
 /////////////////// *********** ensamble ********* ////////////
@@ -28,18 +35,19 @@
 
 
 
-////////////////// sugerido para cuadra
+////////////////// sugerido para ArrayMusic
 (
 /////////////////// *********** ensamble ********* ////////////
-~outputPiraran = Synth(\quadraPiraran, addAction: 'addToTail');
+~outputPiraran = Synth(\surroundPiraran, addAction: 'addToTail');
 
 /////////////////// *********** evento sismico ********* ////////////
-~outputFallAndDebris = Synth(\fallAndDebrisQuad);
+~outputFallAndDebris = Synth(\fallAndDebrisSurround);
+
 
 /////////////////// *********** sonificacion ********* ////////////
-~outputStations = ~initStationsQuad.(~coordinates);
+~outputStations = ~initStationsSurround.(~coordinates);
 
-~headphones = true; // esto debe estar en falso
+ // esto debe estar en falso
 )
 
 (

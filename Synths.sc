@@ -79,7 +79,7 @@ var val= ~range.(100,200);
 
 		var env = EnvGen.ar(Env.pairs([[begin,1],[end,1],[end,0]]), timeScale: sustain, doneAction: Done.freeSelf);
 		var env2 = EnvGen.ar(Env.perc(att,rel),timeScale:sustain);
-		var sig= VOsc.ar(Line.kr(minS,maxS,sustain*inter), pitch,mul: volume);
+		var sig= LPF.ar(VOsc.ar(Line.kr(minS,maxS,sustain*inter), pitch,mul: volume),7500,1);
 		OffsetOut.ar(out,DirtPan.ar(sig*env2, ~dirt.numChannels, pan, env));
 	}).add;
 })
@@ -113,11 +113,15 @@ SynthDef(\1985, { |dur=3, fund=35, gain=2.2, out=0|
 	var vol= EnvGen.kr(Env(dataVol++[0],dur!(data.size-1) ++ [10]));
 
 
-	Out.ar([out, 4], SinOsc.ar(
-		freq: (fund+[0,beats]),
+	Out.ar(out+3, SinOsc.ar(
+		freq: (fund),
 		phase: 0,
 		mul: vol*gain));
 
+	Out.ar(out+6, SinOsc.ar(
+		freq: (fund+beats),
+		phase: 0,
+		mul: vol*gain));
 
 }).add;
 
