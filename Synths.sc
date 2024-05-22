@@ -80,6 +80,7 @@ var val= ~range.(100,200);
 		var env = EnvGen.ar(Env.pairs([[begin,1],[end,1],[end,0]]), timeScale: sustain, doneAction: Done.freeSelf);
 		var env2 = EnvGen.ar(Env.perc(att,rel),timeScale:sustain);
 		var sig= LPF.ar(VOsc.ar(Line.kr(minS,maxS,sustain*inter), pitch,mul: volume),7500,1);
+		sig= LPF.ar(sig, 3500);
 		OffsetOut.ar(out,DirtPan.ar(sig*env2, ~dirt.numChannels, pan, env));
 	}).add;
 })
