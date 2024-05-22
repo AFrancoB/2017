@@ -1,6 +1,6 @@
 (
 /// comentar codigo
-SynthDef(\nilTimekNotToStereo, { |vol=1, makeUp= 2.25,
+SynthDef(\nilTimekNotToStereo, { |vol=1, makeUp= 2,
 	thresh= 0.025118864315096, sBelow=1, sAbove=0.25,
 	lim=0.1, // lim is -20db
 	out=0, in=100|
