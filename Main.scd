@@ -18,7 +18,7 @@ Server.default.options.device = "ASIO : MOTU Pro Audio";
 
 // add here your interface
 
-Server.default.options.numOutputBusChannels = 26;
+Server.default.options.numOutputBusChannels = 28;
 Server.default.options.sampleRate = 48000;
 
 s.waitForBoot {
@@ -31,7 +31,7 @@ s.waitForBoot {
 	~dirt.loadSoundFiles(path ++ "/agua/chile2019/");
 	~dirt.loadSoundFiles(path ++ "/agua/berlinmayday2023/");
 	~dirt.loadSoundFiles(path ++ "/agua/hamilton2024/");
-	~dirt.start(57120, [100,108,116]); ////// 100 = floor, 108 = middle and 116 = ceiling
+	~dirt.start(57120, [100,108,116,150,158,166]); ////// 100 = floor, 108 = middle and 116 = ceiling
 	// ~dirt.start(57120, [0]);
 	coords.load;
 	spatialisation.load;
@@ -40,8 +40,9 @@ s.waitForBoot {
 	synths.load;
 	earthquakeEvent.load;
 	// data.load;
-	~headphones = false;
+	~stereo = false;
 	s.meter;
+
 };
 s.latency = 0.3;
 );

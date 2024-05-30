@@ -29,7 +29,7 @@ SynthDef(\fallAndDebrisStereo, { | vol=1, out=0|
 	var w,x,y,z, decoded;
 
 	// #w,x,y,z = BFEncode2.ar(WhiteNoise.ar(0.5),0.2,1,0,1,0);
-	#w,x,y,z = In.ar(300,4);
+	#w,x,y,z = Compander.ar(In.ar(300,4),In.ar(300,4),0.5);
 
 	decoded = BFDecode1.ar(w,x,y,z,[1.75pi,0.25pi]);
 
@@ -40,7 +40,7 @@ SynthDef(\fallAndDebrisSurround, { | vol=1, out=0|
 	var w,x,y,z, out1, out2, out3, out4, out5;
 
 	// #w,x,y,z = BFEncode2.ar(WhiteNoise.ar(0.5),0.2,1,0,1,0);
-	#w,x,y,z = Compander.ar(In.ar(300,4),WhiteNoise.ar(0.5),0.5);
+	#w,x,y,z = Compander.ar(In.ar(300,4),In.ar(300,4),0.5);
 
 	#out1,out2,out3,out4,out5 = BFDecode1.ar(w,x,y,z,[1.75pi,0.25pi,1pi, 1.25pi, 0.75pi],0,0,(-3).dbamp);
 
@@ -222,7 +222,7 @@ Tdef(\earthquakeEvent, {
 		Tdef(\glass3).play;
 		2.wait;
 		Tdef(\glass4).play;
-		[1,3,2].choose.wait;
+		[1,1.5,2].choose.wait;
 	};
 	1.do{
 		Synth(\fall);

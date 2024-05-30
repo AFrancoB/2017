@@ -1,12 +1,33 @@
 ///////******* THIS NEEDS TO BE ACTIVATED FOR PERFORMANCE    ********//////////
-
-(
+(  ///// NIL SETTINGS !!!!
 /////////////////// *********** ensamble ********* ////////////
-~stereoFromNilTimekNot = Synth(\nilTimekNotToStereo, addAction: 'addToTail');
-/////***** Esto en todos los de SuperDirt
-// Pbind(\out, 116, \pan, Pseq([0,0.25,0.5,0.75,1,1.25,1.5,1.75],inf), \dur, 0.3, \instrument, \aguitar, \volume, (-15).dbamp, \note, Pseq([0,2,3,5,7,8,5,3],inf)).play;
+~timekNot = Synth(\nilTimekNot, addAction: 'addToTail');
+
 /////////////////// *********** evento sismico ********* ////////////
-~outputFallAndDebris = Synth(\fallAndDebrisNIL);
+~outputFallAndDebris = Synth(\fallAndDebrisNIL); // ready!!
+
+s.volume = -6;
+
+// ~timekNot.set(\vol, 0)
+
+/*~timekNot.set(\vol, 1)
+~cosmos.set(\vol, 0)*/
+/////////////////// *********** sonificacion ********* ////////////
+// ~outputStations = ~initStationsStereo.(~coordinates);
+
+)
+
+{Out.ar(116, PanAz.ar(8,WhiteNoise.ar(0.05),LFSaw.ar(0.1)))}.play
+
+
+(  ///// NEW STEREO SETTINGS !!!!
+/////////////////// *********** ensamble ********* ////////////
+~timekNot = Synth(\nilTimekNotToStereo, addAction: 'addToTail');
+
+/////////////////// *********** evento sismico ********* ////////////
+~outputFallAndDebris = Synth(\fallAndDebrisStereo);
+
+
 
 /////////////////// *********** sonificacion ********* ////////////
 // ~outputStations = ~initStationsStereo.(~coordinates);
@@ -113,9 +134,11 @@ Tdef(\earthquakeEvent).play // locally test earthquake event
 
 ~eightyFive = Synth(\1985 ++ ("Headphones"))
 
-~eightyFive = Synth(\1985)
+~eightyFive = Synth(\1985, [\gain, (0).dbamp])
 
 ~eightyFive.set(\gain, 2.2)
+
+~cosmos = Synth(\cosmos ++ ("Stereo"), addAction: 'addToTail');
 
 s.meter
 

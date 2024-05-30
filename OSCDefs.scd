@@ -19,10 +19,30 @@ OSCdef(\earthquake,{
 OSCdef(\1985,{
 	|msg,time,addr,recvPort|
 	if(msg[2].asString=="1985", {
-		if( ~headphones,
-			{~eightyFive = Synth(\1985 ++ ("Headphones"))},
-			{~eightyFive = Synth(\1985)})
-		});
+		if( ~stereo,
+			{~eightyFive = Synth(\1985 ++ ("Stereo"))},
+		{~eightyFive = Synth(\1985, [\out, (0).dbamp])})
+	});
+},"/play2");
+
+OSCdef(\cosmos,{
+	|msg,time,addr,recvPort|
+	if(msg[2].asString=="cosmos", {
+		if( ~stereo,
+			{~cosmos = Synth(\cosmos ++ ("Stereo"), addAction: 'addToTail');
+				"cosmosStereo".postln},
+			{~cosmos = Synth(\cosmos, addAction: 'addToTail');
+				"cosmosNIL".postln})
+	});
+},"/play2");
+
+
+OSCdef(\cosmosoff,{
+	|msg,time,addr,recvPort|
+	if(msg[2].asString=="cosmosoff", {
+		~cosmos.set(\gate, 0);
+		"cosmosOFF".postln;
+	});
 },"/play2");
 
 
@@ -30,11 +50,11 @@ OSCdef(\2017,{
 	|msg,time,addr,recvPort|
 	if(msg[2].asString=="2017", {
 		Tdef(\earthquakeEvent).play
-		});
+	});
 },"/play2");
 
 
-OSCdef(\testy,{
-	|msg,time,addr,recvPort|
-	msg.postln;
-},"/play2");
+// OSCdef(\testy,{
+// 	|msg,time,addr,recvPort|
+// 	msg.postln;
+// },"/play2");
