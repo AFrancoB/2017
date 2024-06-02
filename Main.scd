@@ -42,7 +42,6 @@ s.waitForBoot {
 	synths.load;
 	earthquakeEvent.load;
 	data.load;
-	~stereo = false;
 	s.meter;
 
 };
