@@ -1,5 +1,5 @@
 // earthquake event
-~nel = [
+var nel = [
 	// floor speakers (0 to 7)
 	[-0.25pi,-0.5pi], [0.25pi,-0.5pi], [-0.375pi,-0.5pi], [0.375pi,-0.5pi],
 	[-0.625pi,-0.5pi], [0.625pi,-0.5pi], [-0.75pi,-0.5pi], [0.75pi,-0.5pi],
@@ -18,7 +18,7 @@ SynthDef(\fallAndDebrisNIL, { | vol=1, out=0|
 	// #w,x,y,z = BFEncode2.ar(WhiteNoise.ar(0.5),0.2,1,0,1,0);
 	#w,x,y,z = In.ar(300,4);
 
-	decoded = BFDecode1.ar(w,x,y,z, ~nel[0], ~nel[1],0, (-6).dbamp);
+	decoded = BFDecode1.ar(w,x,y,z, nel[0], nel[1],0, (-0.5).dbamp);
 
 	Out.ar(out, decoded*vol)
 }).add;
@@ -90,7 +90,7 @@ SynthDef(\glass, {
 	granulation= PitchShift.ar(sig*envSig,0.4,1.2,0.3,0.12)*10;
 	sigG= Convolution.ar(granulation, WhiteNoise.ar(0.5), 512/8, 0.1);
 
-	sigOut = BFEncode1.ar(SelectX.ar(which, [sigG*amp*(-6).dbamp, sig*envSig*amp]),r + LFSaw.kr(0.01),elev,2,1);
+	sigOut = BFEncode1.ar(SelectX.ar(which, [sigG*amp*(-6).dbamp, sig*envSig*amp]),r + LFSaw.kr(0.1),elev,2,1);
 
 	Out.ar(out, sigOut )
 }).add;
@@ -104,13 +104,16 @@ SynthDef(\panic, { | vol=1, out=300 |
 		LFNoise0.kr(1).range(0.01,0.5),5000).distort.distort*0.1;
 	var yP1 = EnvGen.kr(Env([0,1.1,0.5,0.8,0.3,0.2,0.6,0.1,0.3,0],[7,7,7,7,2,2,1,2,2]));
 	var xP1 = EnvGen.kr(Env([0,1.1,-1.5,0.8,-1.3,0,0.6,-0.7,0.5,0,-0.8,0],[7,7,7,4,3,2,2,2,1,1,1]));
-	var sig1 = BFEncode2.ar( BPF.ar(sig, 350, 1, 2), xP1,yP1, 0, (-12).dbamp, 1);
+	var elev1 = EnvGen.kr(Env([-0.5pi,0.25pi,-0.1pi,-0.25pi,0.5pi,-0.5pi],[5,5,5,15,7]));
+	var sig1 = BFEncode2.ar( BPF.ar(sig, 350, 1, 2), xP1,yP1,elev1, (-9).dbamp, 1);
 	var yP2 = EnvGen.kr(Env([0,1.1,0.5,0.8,0.1,-0.3,0.3,-0.2,0],[7,7,7,7,3,3,1,2]));
 	var xP2 = EnvGen.kr(Env([0,-1.1,-1.5,0.8,-1.3,-0.9,0],[7,7,7,7,7,2]));
-	var sig2 = BFEncode2.ar( BPF.ar(sig, 750, 1, 2), xP2,yP2, 0, (-12).dbamp, 1);
+	var elev2 = EnvGen.kr(Env([-0.5pi,0.25pi,-0.1pi,-0.25pi,0.5pi,-0.5pi],[5,5,5,15,7]));
+	var sig2 = BFEncode2.ar( BPF.ar(sig, 750, 1, 2), xP2,yP2,elev2, (-9).dbamp, 1);
 	var yP3 = EnvGen.kr(Env([0,1.1,0.5,0.8,0.8,0.9,0],[7,7,7,7,5,4]));
 	var xP3 = EnvGen.kr(Env([0,-1.1,-1.5,0.8,-1.3,-0.9,0],[7,7,7,7,7,2]));
-	var sig3 = BFEncode2.ar( BPF.ar(sig, 1350, 1, 2), xP3,yP3, 0, (-12).dbamp, 1);
+	var elev3 = EnvGen.kr(Env([-0.5pi,0.25pi,-0.1pi,-0.25pi,0.5pi,-0.5pi],[5,5,5,15,7]));
+	var sig3 = BFEncode2.ar( BPF.ar(sig, 1350, 1, 2), xP3,yP3,elev3, (-9).dbamp, 1);
 
 	var yP4 = EnvGen.kr(Env([0,1.5,-1.5,1.8,-0.8,-1.2,0],[7,7,7,7,5,4]));
 	var xP4 = EnvGen.kr(Env([0,-1.1,-1.5,0.8,-1.3,-0.4,0],[7,7,7,7,7,2]));
@@ -152,8 +155,8 @@ Tdef(\glass1, {
 		var radio = iter.linlin(0,59,-0.2,0.2);
 		Synth(\glass, [\freq, rrand(4500,7000), \which, rrand(0,0.5),
 			\decRing, rrand(0.05,1.5),\rel, rrand(0.1,0.8),
-			\amp, iter.linexp(0,59, (-6).dbamp, (-24).dbamp),
-			\elev, iter.linlin(0,59, 0.5, -0.5),
+			\amp, iter.linexp(0,59, (-4.5).dbamp, (-20).dbamp),
+			\elev, iter.linlin(0,59, 0.5pi, -0.5pi),
 			\r, radio + rrand(0,0.1)]);
 		[0.01,0.07,0.05,0.005].choose.wait;
 	};

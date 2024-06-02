@@ -1,5 +1,6 @@
 (
 var path = thisProcess.nowExecutingPath.dirname;
+var envir = path ++ "/environment.scd";
 var coords = path ++ "/coordinates.scd";
 var spatialisation = path ++ "/earthquakeSpatialisation.scd";
 var synths = path ++ "/Synths.sc";
@@ -33,13 +34,14 @@ s.waitForBoot {
 	~dirt.loadSoundFiles(path ++ "/agua/hamilton2024/");
 	~dirt.start(57120, [100,108,116,150,158,166]); ////// 100 = floor, 108 = middle and 116 = ceiling
 	// ~dirt.start(57120, [0]);
+	envir.load;
 	coords.load;
 	spatialisation.load;
 	oscDefs.load;
 	ensemble.load;
 	synths.load;
 	earthquakeEvent.load;
-	// data.load;
+	data.load;
 	~stereo = false;
 	s.meter;
 

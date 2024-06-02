@@ -105,7 +105,7 @@ SynthDef(\wave, {
 
 
 (
-SynthDef(\1985, { |dur=3, fund=35, gain=0.5, out=0|
+SynthDef(\1985, { |dur=3, fund=35, gain=0.5, out=0| // NIL output system
 	var earthquakePseudoData = [0.1,0.2,0.1,0.3,0.2,0.5,0.4,0.7,0.5,0.6,0.8,0.7,0.9,0.8,1,0.9,0.6,0.7,0.3,0.4,0.1,0.2,0];
 	var data= earthquakePseudoData.stutter;
 	var dataBeats= data.linlin(0,1,20,2);
@@ -114,15 +114,20 @@ SynthDef(\1985, { |dur=3, fund=35, gain=0.5, out=0|
 	var vol= EnvGen.kr(Env(dataVol++[0],dur!(data.size-1) ++ [10]));
 
 
-	Out.ar(out+[24,26], SinOsc.ar(
+	Out.ar(out+[24,25], SinOsc.ar(
 		freq: (fund),
 		phase: 0,
 		mul: vol*gain));
 
-	Out.ar(out+[25,27], SinOsc.ar(
+	Out.ar(out+[26,27], SinOsc.ar(
 		freq: (fund+beats),
 		phase: 0,
 		mul: vol*gain));
+
+/*	Out.ar(out+24, Mix(SinOsc.ar(
+		freq: (fund+[0,beats]),
+		phase: 0,
+		mul: vol*gain))!4);*/
 
 }).add;
 
@@ -137,7 +142,7 @@ SynthDef(\1985 ++ ("Stereo"), { |dur=2, fund=35, gain=2.4, out=0|
 	var vol= EnvGen.kr(Env(dataVol++[0],dur!(data.size-1) ++ [10]));
 
 
-	Out.ar([out, 4], Mix(SinOsc.ar(
+	Out.ar(out, Mix(SinOsc.ar(
 		freq: (fund+[0,beats]),
 		phase: 0,
 		mul: vol*gain))!2);

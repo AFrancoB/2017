@@ -181,16 +181,20 @@ dataToSonify.collect({|stat, iter|
 			var rin = EnvGen.kr(Env(r, [res]));
 			var dec = EnvGen.kr(Env(d, [res]));
 
-			Out.ar(out,
-				Compander.ar(PanX.ar(3,
+			var sig = PanX.ar(3,
 					CombC.ar(
 						RLPF.ar(
 							VOsc.ar((timbre+2031) + w, freq, mul: amp) ///// first buffer hardcoded, WARNING!!!!!!!
 							,cut,1)
 						,0.2, rin, dec),
 					pos, vol
-				),
-				WhiteNoise.ar(0.5),0.5)
+				);
+
+			sig = LPF.ar(sig,1200);
+
+			Out.ar(out,
+				Limiter.ar(Compander.ar(sig,sig,0.5)
+					,(-12).dbamp)*Line.kr(0,1,15)
 			)
 		}).add
 	})

@@ -20,8 +20,8 @@ OSCdef(\1985,{
 	|msg,time,addr,recvPort|
 	if(msg[2].asString=="1985", {
 		if( ~stereo,
-			{~eightyFive = Synth(\1985 ++ ("Stereo"))},
-		{~eightyFive = Synth(\1985, [\out, (0).dbamp])})
+			{~eightyFive = Synth(\1985 ++ ("Stereo"), [\out, ~mainOut])}, ///// main out should be declared before turning on MAIN!
+		{~eightyFive = Synth(\1985)})
 	});
 },"/play2");
 
@@ -29,7 +29,7 @@ OSCdef(\cosmos,{
 	|msg,time,addr,recvPort|
 	if(msg[2].asString=="cosmos", {
 		if( ~stereo,
-			{~cosmos = Synth(\cosmos ++ ("Stereo"), addAction: 'addToTail');
+			{~cosmos = Synth(\cosmos ++ ("Stereo"), [\out, ~mainOut], addAction: 'addToTail');
 				"cosmosStereo".postln},
 			{~cosmos = Synth(\cosmos, addAction: 'addToTail');
 				"cosmosNIL".postln})

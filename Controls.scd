@@ -13,24 +13,22 @@ s.volume = -6;
 /*~timekNot.set(\vol, 1)
 ~cosmos.set(\vol, 0)*/
 /////////////////// *********** sonificacion ********* ////////////
-// ~outputStations = ~initStationsStereo.(~coordinates);
+~outputStations = ~initStationsNIL.(~coordinates);
 
 )
-
-{Out.ar(116, PanAz.ar(8,WhiteNoise.ar(0.05),LFSaw.ar(0.1)))}.play
+~waveList.choose
 
 
 (  ///// NEW STEREO SETTINGS !!!!
 /////////////////// *********** ensamble ********* ////////////
-~timekNot = Synth(\nilTimekNotToStereo, addAction: 'addToTail');
+~timekNot = Synth(\nilTimekNotToStereo,[\out, ~mainOut],  addAction: 'addToTail');
 
 /////////////////// *********** evento sismico ********* ////////////
-~outputFallAndDebris = Synth(\fallAndDebrisStereo);
-
+~outputFallAndDebris = Synth(\fallAndDebrisStereo, [\out, ~mainOut]);
 
 
 /////////////////// *********** sonificacion ********* ////////////
-// ~outputStations = ~initStationsStereo.(~coordinates);
+~outputStations = ~initStationsStereo.(~coordinates, ~mainOut);
 
 )
 
@@ -132,13 +130,13 @@ var vol = 3; // vol in dBs
 
 Tdef(\earthquakeEvent).play // locally test earthquake event
 
-~eightyFive = Synth(\1985 ++ ("Headphones"))
+~eightyFive = Synth(\1985 ++ ("Stereo"), [\out, ~mainOut])
 
-~eightyFive = Synth(\1985, [\gain, (0).dbamp])
+~eightyFive = Synth(\1985, [\gain, (6).dbamp])
 
 ~eightyFive.set(\gain, 2.2)
 
-~cosmos = Synth(\cosmos ++ ("Stereo"), addAction: 'addToTail');
+~cosmos = Synth(\cosmos ++ ("Stereo"), [\out, ~mainOut], addAction: 'addToTail');
 
 s.meter
 
