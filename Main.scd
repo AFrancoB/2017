@@ -1,6 +1,9 @@
 (
 var path = thisProcess.nowExecutingPath.dirname;
+
 var envir = path ++ "/environment.scd";
+
+
 var coords = path ++ "/coordinates.scd";
 var spatialisation = path ++ "/earthquakeSpatialisation.scd";
 var synths = path ++ "/Synths.sc";
