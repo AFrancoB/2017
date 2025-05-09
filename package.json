@@ -1,0 +1,14 @@
+{
+  "name": "La Fábrica Colapsada",
+  "version": "1.0.0",
+  "description": "Ejercicio de sonificación de datos del sismo de Septiembre del 2017",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@diegovdc/superdirt-socket": "^0.0.3"
+  }
+}
