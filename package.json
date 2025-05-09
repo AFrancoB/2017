@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@diegovdc/superdirt-socket": "^0.0.3"
+    "@diegovdc/superdirt-socket": "0.0.4"
   }
 }
