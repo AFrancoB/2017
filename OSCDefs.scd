@@ -20,7 +20,7 @@ OSCdef(\1985,{
 	|msg,time,addr,recvPort|
 	if(msg[2].asString=="1985", {
 		if( ~stereo,
-			{~eightyFive = Synth(\1985 ++ ("Stereo"), [\out, ~out1985, \gain, (-3).db])}, ///// main out should be declared before turning on MAIN!
+			{~eightyFive = Synth(\1985 ++ ("Stereo"), [\out, ~out1985, \gain, (-3).dbamp])}, ///// main out should be declared before turning on MAIN!
 			{~eightyFive = Synth(\1985, [\out, ~out1985])})
 	});
 },"/play2");
