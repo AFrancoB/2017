@@ -24,11 +24,11 @@ s.volume = -6;
 ~timekNot = Synth(\nilTimekNotToStereo,[\out, ~mainOut],  addAction: 'addToTail');
 
 /////////////////// *********** evento sismico ********* ////////////
-~outputFallAndDebris = Synth(\fallAndDebrisStereo, [\out, ~mainOut]);
+~outputFallAndDebris = Synth(\fallAndDebrisStereo, [\out, ~outearthquakeEvent]);
 
 
 /////////////////// *********** sonificacion ********* ////////////
-~outputStations = ~initStationsStereo.(~coordinates, ~mainOut);
+~outputStations = ~initStationsStereo.(~coordinates, ~outSonification);
 
 )
 

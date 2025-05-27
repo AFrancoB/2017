@@ -20,8 +20,8 @@ OSCdef(\1985,{
 	|msg,time,addr,recvPort|
 	if(msg[2].asString=="1985", {
 		if( ~stereo,
-			{~eightyFive = Synth(\1985 ++ ("Stereo"), [\out, ~mainOut])}, ///// main out should be declared before turning on MAIN!
-		{~eightyFive = Synth(\1985)})
+			{~eightyFive = Synth(\1985 ++ ("Stereo"), [\out, ~out1985])}, ///// main out should be declared before turning on MAIN!
+			{~eightyFive = Synth(\1985, [\out, ~out1985])})
 	});
 },"/play2");
 
@@ -49,12 +49,24 @@ OSCdef(\cosmosoff,{
 OSCdef(\2017,{
 	|msg,time,addr,recvPort|
 	if(msg[2].asString=="2017", {
-		Tdef(\earthquakeEvent).play
+		Tdef(\earthquakeEvent).play;
 	});
 },"/play2");
 
 
-// OSCdef(\testy,{
-// 	|msg,time,addr,recvPort|
-// 	msg.postln;
-// },"/play2");
+
+/*(
+OSCdef(\testy,{
+	|msg,time,addr,recvPort|
+	msg.postln;
+},"/play2");
+
+~testOSC = NetAddr("127.0.0.1", NetAddr.langPort);
+
+~testOSC.sendMsg("/play2", "s", "1985");
+)*/
+
+
+
+
+
